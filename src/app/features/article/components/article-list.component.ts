@@ -6,7 +6,7 @@ import { ArticlePreviewComponent } from "./article-preview.component";
 import { NgClass, NgForOf, NgIf } from "@angular/common";
 import { LoadingState } from "../../../core/models/loading-state.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-
+import { Observable } from "rxjs";
 @Component({
   selector: "app-article-list",
   template: `

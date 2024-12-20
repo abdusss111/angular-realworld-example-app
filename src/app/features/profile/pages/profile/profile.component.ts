@@ -14,6 +14,7 @@ import { ProfileService } from "../../services/profile.service";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FollowButtonComponent } from "../../components/follow-button.component";
+import { mockUser } from "../../user";
 
 @Component({
   selector: "app-profile-page",
@@ -30,7 +31,7 @@ import { FollowButtonComponent } from "../../components/follow-button.component"
   standalone: true,
 })
 export class ProfileComponent implements OnInit {
-  profile!: Profile;
+  profile!: Profile | null; 
   isUser: boolean = false;
   destroyRef = inject(DestroyRef);
 
@@ -41,23 +42,16 @@ export class ProfileComponent implements OnInit {
     private readonly profileService: ProfileService,
   ) {}
 
-  ngOnInit() { // You need to modify this for Task 3
-    this.profileService
-      .get(this.route.snapshot.params["username"])
-      .pipe(
-        // catchError((error) => {
-        //   void this.router.navigate(["/"]);
-        //   return throwError(() => error);
-        // }),
-        switchMap((profile) => {
-          return combineLatest([of(profile), this.userService.currentUser]);
-        }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(([profile, user]) => {
-        this.profile = profile;
-        this.isUser = profile.username === user?.username;
-      });
+  ngOnInit() {
+    const username = this.route.snapshot.params["username"];
+
+    // Check if the URL matches the mock user condition
+    if (username === "johndoe") {
+      this.profile = mockUser;
+      this.isUser = true; // Adjust as needed for your UI logic
+    } else {
+      this.profile = null; // Represents "Wrong user"
+    }
   }
 
   onToggleFollowing(profile: Profile) {

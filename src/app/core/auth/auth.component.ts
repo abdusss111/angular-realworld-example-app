@@ -25,6 +25,8 @@ interface AuthForm {
   standalone: true,
 })
 export default class AuthComponent implements OnInit {
+  currPassword = "";
+  currEmail = "";
   authType = "";
   title = "";
   errors: Errors = { errors: {} };
@@ -70,7 +72,7 @@ export default class AuthComponent implements OnInit {
     let observable =
       this.authType === "login"
         ? this.userService.login(
-            this.authForm.value as { email: string; password: string },
+          { email: this.currEmail, password: this.currPassword },
           )
         : this.userService.register(
             this.authForm.value as {
